@@ -17,11 +17,11 @@ class ChatList extends Component {
     return this.props.newChatButtonClicked();
   };
 
-  selectChat = index => {
+  selectChat = (index) => {
     this.props.selectChat(index);
   };
 
-  userIsSender = chat => {
+  userIsSender = (chat) => {
     return (
       chat.messages[chat.messages.length - 1].sender === this.props.userEmail
     );
@@ -45,6 +45,9 @@ class ChatList extends Component {
 
           <List>
             {this.props.chats.map((_chat, index) => {
+              console.log(
+                _chat.users.filter((user) => user !== this.props.userEmail)[0]
+              );
               return (
                 <div key={index}>
                   <ListItem
@@ -57,7 +60,9 @@ class ChatList extends Component {
                       <Avatar alt='Remy Sharp'>
                         {
                           _chat.users
-                            .filter(_user => _user !== this.props.userEmail)[0]
+                            .filter(
+                              (_user) => _user !== this.props.userEmail
+                            )[0]
                             .split("")[0]
                         }
                       </Avatar>
@@ -65,7 +70,7 @@ class ChatList extends Component {
                     <ListItemText
                       primary={
                         _chat.users.filter(
-                          _user => _user !== this.props.userEmail
+                          (_user) => _user !== this.props.userEmail
                         )[0]
                       }
                       secondary={

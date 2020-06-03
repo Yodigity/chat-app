@@ -25,16 +25,16 @@ class Dashboard extends Component {
       if (!_usr) {
         this.props.history.push("/login");
       } else {
-        await firebase
+        firebase
           .firestore()
           .collection("chats")
           .where("users", "array-contains", _usr.email)
-          .get(async (res) => {
-            console.log(res.docs);
+          .onSnapshot(async (res) => {
             const chats = res.docs.map((_doc) => _doc.data());
             await this.setState({
               email: _usr.email,
-              chats: chats,
+              chats: chats ? chats : [],
+              friends: [],
             });
             console.log(this.state);
           });
@@ -91,6 +91,7 @@ class Dashboard extends Component {
   };
 
   newChatSubmit = async (chatObj) => {
+    console.log("activated");
     const docKey = this.buildDocKey(chatObj.sentTo);
     await firebase
       .firestore()

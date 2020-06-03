@@ -20,6 +20,7 @@ class NewChat extends Component {
     this.state = {
       username: null,
       message: null,
+      errors: [],
     };
   }
 
@@ -41,6 +42,10 @@ class NewChat extends Component {
     if (userExists) {
       const chatExists = await this.chatExists();
       chatExists ? this.goToChat() : this.createChat();
+    } else {
+      this.setState({
+        errors: { username: "That user does not exist. Sorry!" },
+      });
     }
   };
 
@@ -52,7 +57,7 @@ class NewChat extends Component {
     this.props.newChatSubmit(newChatDetails);
   };
 
-  gotToChat = () => {
+  goToChat = () => {
     this.props.goToChat(this.buildDocKey(), this.state.message);
   };
 
@@ -106,7 +111,7 @@ class NewChat extends Component {
                 autoFocus
                 onChange={(e) => this.userTyping("username", e)}
                 id='new-chat-username'
-              ></Input>
+              />
             </FormControl>
 
             <FormControl fullWidth>
@@ -121,10 +126,12 @@ class NewChat extends Component {
               ></Input>
             </FormControl>
             <Button
+              type='submit'
               fullWidth
               className={classes.submit}
               variant='contained'
               color='primary'
+              onSubmit={(e) => this.submitNewChat(e)}
             >
               Submit
             </Button>
